@@ -139,3 +139,4 @@ cython_debug/
 
 # SQLite
 *.db
+*.sqbpro
