@@ -12,7 +12,7 @@ sql="""
    FROM event
    JOIN reference ON event.handle = reference.ref_handle
    JOIN person ON reference.obj_handle = person.handle
-   LEFT JOIN place on event.place = place.handle
+   LEFT JOIN place on event.place = place.handle LIMIT 10
 """
 for eventRow in curEx.execute(sql):
     event = pickle.loads((eventRow[0]))
