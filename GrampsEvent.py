@@ -12,19 +12,20 @@ sql="""
    FROM event
    JOIN reference ON event.handle = reference.ref_handle
    JOIN person ON reference.obj_handle = person.handle
-   LEFT JOIN place on event.place = place.handle LIMIT 10
+   LEFT JOIN place on event.place = place.handle WHERE event.description IS NOT '' LIMIT 100
 """
+
 for eventRow in curEx.execute(sql):
     event = pickle.loads((eventRow[0]))
-    print(eventRow[1]) # gramps.id
-    print(eventRow[2]) # event.description
-    print(eventRow[3]) # Person.Handle
-    print(eventRow[4]) # person.given_name
-    print(eventRow[5]) # person.surname
-    print(eventRow[6]) # place.title
-    print(event[1]) # eventID
-    print(event[2]) # eventType 12=födelse, 13=död
-    print(event[3]) # datum tuple
+    print('gid:',eventRow[1], end=', ') # gramps.id
+    print('description:',eventRow[2], end=', ') # event.description
+    print('Handle:',eventRow[3], end=', ') # Person.Handle
+    print('given_name:', eventRow[4],end=', ') # person.given_name
+    print('surname:', eventRow[5],end=', ') # person.surname
+    print("place:", eventRow[6],end=', ') # place.title
+    print("eventID:", event[1],end=', ') # eventID
+    print("eventType:", event[2],end=', ') # eventType 12=födelse, 13=död
+    # print(event[3]) # datum tuple
     d = event[3] # event.date
     if d is not None:
       print(d[3])
