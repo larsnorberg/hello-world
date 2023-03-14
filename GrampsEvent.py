@@ -2,6 +2,8 @@
 import datetime
 import pickle
 import sqlite3
+import MetaData
+
 msg = "Execution started"
 print(msg)
 conEx = sqlite3.connect('example.db')
@@ -14,8 +16,10 @@ sql="""
    JOIN person ON reference.obj_handle = person.handle
    LEFT JOIN place on event.place = place.handle WHERE event.description IS NOT '' LIMIT 100
 """
-
-for eventRow in curEx.execute(sql):
+recordset = curEx.execute(sql)
+print("type(recordset):", type(recordset))
+for eventRow in recordset:
+    print ("type of eventRow is:", type(eventRow))
     event = pickle.loads((eventRow[0]))
     print('gid:',eventRow[1], end=', ') # gramps.id
     print('description:',eventRow[2], end=', ') # event.description
