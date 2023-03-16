@@ -32,3 +32,9 @@ my_tuple_1 = tuple(my_tuple_1)
 
 print("The tuple after adding the dictionary elements is : ")
 print(my_tuple_1)
+
+def print_tuple(tuple):
+    colIndex=0
+    for col in tuple:
+        print(col,colIndex)
+        colIndex += 1

@@ -2,7 +2,7 @@
 import datetime
 import pickle
 import sqlite3
-import MetaData
+import meta_data
 
 msg = "Execution started"
 print(msg)
