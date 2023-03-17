@@ -2,7 +2,7 @@
 
 class gramps_dateCls:
     def __init__(self, date_tuple):
-        self.date = 'sakjf'
+        self.date = '1950-05-23'
 
 # print all elements in collection
 def print_collection(collection):

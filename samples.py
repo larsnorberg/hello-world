@@ -1,4 +1,24 @@
 # samples.py
+### *** todo *** ###
+## __init__.py , import from other file, check if classes have to be imported by class name
+## import from other (sub)folder
+
+# path
+import os
+print(os.getcwd())
+os.chdir(c:\\users\\larsn)
+print (os.path.abspath(__file__))
+print (os.path.realpath(__file__))
+import pathlib
+print(pathlib.Path(__file__).parents[0])
+
+# import from file
+from utility_cls import * # alla namn i en fil
+print_collection((3,4))
+d = gramps_dateCls((5,6))
+print(d.date)
+
+quit()
 
 # attach database
 import sqlite3
