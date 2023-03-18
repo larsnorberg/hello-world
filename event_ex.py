@@ -27,7 +27,7 @@ class eventCls: # class to handle event data and extension table
         private = 1 if self.private else 0
         exec_result = cursor.execute (self.sql_insert_txt, (self.handle, self.gramps_id, self.date_str, self.description, self.place_handle, self.change, private))
         return exec_result
-# end class
+# end eventCls
 
 #*** start main ***
 con = sqlite3.connect('example.db')

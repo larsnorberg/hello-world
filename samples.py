@@ -3,10 +3,18 @@
 ## __init__.py , import from other file, check if classes have to be imported by class name
 ## import from other (sub)folder
 
+# chass måste komma för en instance är skapad
+# thisplace = place() här skulle ge ett error
+class place:
+    def __init__(self):
+        self.data = "some data"
+thisplace = place()
+print(thisplace.data)
+
 # path
 import os
 print(os.getcwd())
-os.chdir(c:\\users\\larsn)
+os.chdir("c:\\users\\larsn")
 print (os.path.abspath(__file__))
 print (os.path.realpath(__file__))
 import pathlib
