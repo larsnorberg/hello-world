@@ -19,12 +19,12 @@ class person_cls:
         self.given_name = person[3][12]
         self.surname = person[3][5][0][0]
         self.surname_list = person[3][5]
-        self.title =person[3][7]
+        self.title =person[3][7].lower()
         self.change = datetime.datetime.fromtimestamp(person[17])
         self.change_str = self.change.strftime('%Y-%m-%d %H:%M:%S')
         
     def __str__(self):
-        return f"{self.handle} {self.gramps_id} {self.gender} {self.given_name_list} {self.surname} {self.title} {self.given_name}"
+        return f"{self.handle} {self.gramps_id} {self.surname} {self.given_name_list if self.given_name == '' else self.given_name} {self.title}"
 
 def create_table(cur_ex):
     cur_ex.execute("DROP TABLE IF EXISTS person_ex")
@@ -36,10 +36,10 @@ con_ex = sqlite3.connect('grampsLN.db')
 cur = con.cursor()
 cur_ex = con_ex.cursor()
 
-for row in cur.execute("SELECT handle, blob_data FROM person LIMIT 10 "):
+for row in cur.execute("SELECT handle, blob_data FROM person LIMIT 100 "):
     person = person_cls(pickle.loads(row[1]))
     print(person)
-    print(pickle.loads(row[1]))
+    # print(pickle.loads(row[1]))
     
     ## cur_ex.execute("INSERT INTO person_ex (handle, given_name) values (?,?)", (person.handle,person.given_name))
 
