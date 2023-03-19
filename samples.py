@@ -64,13 +64,16 @@ def print_tuple(tuple):
 def attach_db():
     con = sqlite3.connect('example.db')
     con_ex = sqlite3.connect('grampsLN.db')
-    cur = con.cursor()
-    attachDatabaseSQL = "ATTACH DATABASE ? AS gramps_ex"
-    dbSpec  = ("grampsLN.db",)
-    cur.execute(attachDatabaseSQL,dbSpec)
-    for person_db in cur.execute("SELECT * FROM gramps_ex.person_ex"):
+    cur_ex = con_ex.cursor()
+    attachDatabaseSQL = "ATTACH DATABASE ? AS gramps"
+    dbSpec  = ("example.db",)
+    cur_ex.execute(attachDatabaseSQL,dbSpec)
+    for person_db in cur_ex.execute("SELECT * FROM gramps.person LIMIT 10"):
         print(person_db)
 
 ##### __main __ ####
+print ("\n\n")
+# attach_db()
 print( "age:", calculate_age(datetime.date(1950,3,20)))
 # path_stuff()
+print("finished!!")
