@@ -16,19 +16,21 @@ class familyCls:
         self.gramps_id = tuple[1]
         self.children_list = tuple[4]
         self.private = tuple[14]
-        change = datetime.datetime.fromtimestamp(tuple[12])
-        self.change_str = change.strftime('%Y-%m-%d %H:%M:%S')
+        self.change = tuple[12]
     def __str__(self):
-        return f"{self.handle} {self.gramps_id} private:{self.private} {self.change_str}"
+        return f"{self.handle} {self.gramps_id} private:{self.private}"
+    sql_insert_txt = "INSERT INTO family_ex (handle, gramps_id, family_type, private, change) values (?,?,?,?,?)"
+    def exec_insert(self, cursor):
+        private = 1 if self.private else 0
+        exec_result = cursor.execute (self.sql_insert_txt, (self.handle, self.gramps_id, self.private, self.change))
+        return exec_result
 
 con = sqlite3.connect('example.db')
 cur = con.cursor()
 for row in cur.execute("SELECT handle, blob_data FROM family LIMIT 10 "):
-    p = pickle.loads((row[1]))
-    # print_collection(p)
-    family = familyCls(p)
+    family = familyCls(pickle.loads(row[1]))
     print(family)
-    print("family.children_list:", family.children_list)
+    print("children_list:", family.children_list)
 
 cur.close()
 con.close()

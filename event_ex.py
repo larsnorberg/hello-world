@@ -1,5 +1,7 @@
 # event_ex.py
 
+## todo: utöka event_ex med platsinformation
+
 import datetime
 import pickle
 import sqlite3
@@ -12,7 +14,8 @@ print(msg)
 
 class eventCls: # class to handle event data and extension table
     def __init__(self, tuple): # tuple is the tuple returned from unpickle blob_data in event table
-        self.change = datetime.datetime.fromtimestamp(tuple[10]).strftime('%Y-%m-%d %H:%M:%S')
+        self.change = tuple[10]
+        self.change_str = datetime.datetime.fromtimestamp(tuple[10]).strftime('%Y-%m-%d %H:%M:%S')
         self.date_str = tuple[3][4] if tuple[3] != None else ''
         self.description = tuple[4]
         self.event_type = event_types[tuple[2][0]] if len(event_types) > tuple[2][0] else str(tuple[2][0])

@@ -20,15 +20,15 @@ class person_cls:
         self.surname = person[3][5][0][0]
         self.surname_list = person[3][5]
         self.title = person[3][7].lower()
-        self.change = datetime.datetime.fromtimestamp(person[17])
-        self.change_str = self.change.strftime('%Y-%m-%d %H:%M:%S')
+        self.change = person[17]
+        self.change_str = datetime.datetime.fromtimestamp(person[17]).strftime('%Y-%m-%d %H:%M:%S')
         self.private = person[19]
     def __str__(self):
         return f"{self.handle} {self.gramps_id} {self.surname} {self.given_name_list if self.given_name == '' else self.given_name} {self.title} {self.private}"
-    sql_insert_txt = "INSERT INTO person_ex (handle, gramps_id, gender, given_name, surname, title, private) values (?,?,?,?,?,?,?)"
+    sql_insert_txt = "INSERT INTO person_ex (handle, gramps_id, gender, given_name, surname, title, change, private) values (?,?,?,?,?,?,?,?)"
     def exec_insert(self, cursor):
         private = 1 if self.private else 0
-        exec_result = cursor.execute (self.sql_insert_txt, (self.handle, self.gramps_id, self.gender, self.given_name, self.surname, self.title, private))
+        exec_result = cursor.execute (self.sql_insert_txt, (self.handle, self.gramps_id, self.gender, self.given_name, self.surname, self.title, self.change, self.private))
         return exec_result
 
 def create_table(cur_ex):
