@@ -26,28 +26,27 @@ class person_cls:
     def __str__(self):
         return f"{self.handle} {self.gramps_id} {self.surname} {self.given_name_list if self.given_name == '' else self.given_name} {self.title} {self.private}"
     sql_insert_txt = "INSERT INTO person_ex (handle, gramps_id, gender, given_name, surname, title, change, private) values (?,?,?,?,?,?,?,?)"
-    def exec_insert(self, cursor):
-        private = 1 if self.private else 0
-        exec_result = cursor.execute (self.sql_insert_txt, (self.handle, self.gramps_id, self.gender, self.given_name, self.surname, self.title, self.change, self.private))
+    def exec_insert(self, con):
+        exec_result = con.execute (self.sql_insert_txt, (self.handle, self.gramps_id, self.gender, self.given_name, self.surname, self.title, self.change, self.private))
         return exec_result
 
-def create_table(cur_ex):
-    cur_ex.execute("DROP TABLE IF EXISTS person_ex")
-    cur_ex.execute("CREATE TABLE person_ex (Handle VARCHAR(50) PRIMARY KEY NOT NULL, gramps_id TEXT, gender TEXT, given_name TEXT, surname TEXT, title TEXT, private INTEGER)")
+def create_table(con):
+    con.execute("DROP TABLE IF EXISTS person_ex")
+    con.execute("CREATE TABLE person_ex (Handle VARCHAR(50) PRIMARY KEY NOT NULL, gramps_id TEXT, gender TEXT, given_name TEXT, surname TEXT, title TEXT, private INTEGER)")
 
 ### main
-con = sqlite3.connect('example.db')
+con = sqlite3.connect('file:sqlite.db?mode=ro', uri=True)
 con_ex = sqlite3.connect('grampsLN.db')
-cur = con.cursor()
-cur_ex = con_ex.cursor()
 
-for row in cur.execute("SELECT handle, blob_data FROM person LIMIT 100 "):
+for row in con.execute("SELECT handle, blob_data FROM person LIMIT 100 "):
     person = person_cls(pickle.loads(row[1]))
     print(person)
     ## print(pickle.loads(row[1]))
-    result = person.exec_insert(cur_ex)
+    result = person.exec_insert(con_ex)
 
 con_ex.commit()
-result = cur_ex.execute("SELECT * FROM person_ex")
+result = con_ex.execute("SELECT * FROM person_ex")
 print(result)
+con.close()
+con_ex.close()
 print("Execution finished")

@@ -12,7 +12,7 @@ from meta_data import event_types
 msg = "\nExecution of event_revEng started: "
 print(msg)
 
-class eventCls: # class to handle event data and extension table
+class event_cls: # class to handle event data and extension table
     def __init__(self, tuple): # tuple is the tuple returned from unpickle blob_data in event table
         self.change = tuple[10]
         self.change_str = datetime.datetime.fromtimestamp(tuple[10]).strftime('%Y-%m-%d %H:%M:%S')
@@ -26,26 +26,22 @@ class eventCls: # class to handle event data and extension table
     def __str__(self):
         return f"{self.event_type} {self.description} {self.date_str} {self.gramps_id} place:{self.place_handle}"
     sql_insert_txt = "INSERT INTO event_ex (handle, gramps_id, date, description, place_handle, change, private) values (?,?,?,?,?,?,?)"
-    def exec_insert(self, cursor):
-        private = 1 if self.private else 0
-        exec_result = cursor.execute (self.sql_insert_txt, (self.handle, self.gramps_id, self.date_str, self.description, self.place_handle, self.change, private))
+    def exec_insert(self, con):
+        exec_result = con.execute (self.sql_insert_txt, (self.handle, self.gramps_id, self.date_str, self.description, self.place_handle, self.change, self.private))
         return exec_result
-# end eventCls
+# end event_cls
 
 #*** start main ***
-con = sqlite3.connect('example.db')
-cur = con.cursor()
+con = sqlite3.connect('file:sqlite.db?mode=ro', uri=True)
+con.row_factory = sqlite3.Row # use row_faktory
 con_ex = sqlite3.connect('grampsLN.db')
-cur_ex = con_ex.cursor()
-for row in cur.execute("SELECT handle, blob_data, description FROM event"):
+for row in con.execute("SELECT handle, blob_data, description FROM event"):
     p = pickle.loads((row[1]))
     # print("type(p):", type(p)) 
     # print_collection(p)
-    event = eventCls(p)
+    event = event_cls(p)
     print(event)
-    result = event.exec_insert(cur_ex)
+    result = event.exec_insert(con_ex)
 con_ex.commit()
-cur_ex.close()
 con_ex.close()
-cur.close()
 con.close()
