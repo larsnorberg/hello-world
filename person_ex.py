@@ -27,7 +27,8 @@ class person_cls:
         return f"{self.handle} {self.gramps_id} {self.surname} {self.given_name_list if self.given_name == '' else self.given_name} {self.title} {self.private}"
     sql_insert_txt = "INSERT INTO person_ex (handle, gramps_id, gender, given_name, surname, title, change, private) values (?,?,?,?,?,?,?,?)"
     def exec_insert(self, con):
-        exec_result = con.execute (self.sql_insert_txt, (self.handle, self.gramps_id, self.gender, self.given_name, self.surname, self.title, self.change, self.private))
+        given_name = self.given_name if self.given_name != '' else self.given_name_list
+        exec_result = con.execute (self.sql_insert_txt, (self.handle, self.gramps_id, self.gender, given_name, self.surname, self.title, self.change, self.private))
         return exec_result
 
 def create_table(con):
@@ -38,7 +39,7 @@ def create_table(con):
 con = sqlite3.connect('file:sqlite.db?mode=ro', uri=True)
 con_ex = sqlite3.connect('grampsLN.db')
 
-for row in con.execute("SELECT handle, blob_data FROM person LIMIT 100 "):
+for row in con.execute("SELECT handle, blob_data FROM person"):
     person = person_cls(pickle.loads(row[1]))
     print(person)
     ## print(pickle.loads(row[1]))
