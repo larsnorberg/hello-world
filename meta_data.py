@@ -48,6 +48,23 @@ class eventtype():
     WILL = 44
     STILLBIRTH = 45
 
-event_types = ('0','1','2','3','4','5','6','7',\
-               '8','9','10','11','födelse','död')
-print(event_types[12])
+def event_type(type):
+    event_types = {
+        1:'äktenskap',
+        7:'skilsmässa',
+        12:'födelse',
+        13:'död',
+        15:'dop',
+        19:'begravning',
+        20:'dödsorsak',
+        28:'emigration',
+        30:'immigration',
+        32:'hälsoinformation',
+        42:'bosatt'
+        }
+    try:
+        return event_types[type]
+    except:
+        return type
+
+print(event_type(16))
