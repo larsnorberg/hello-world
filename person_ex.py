@@ -25,7 +25,8 @@ class person_cls:
         self.private = person[19]
     def __str__(self):
         return f"{self.handle} {self.gramps_id} {self.surname} {self.given_name_list if self.given_name == '' else self.given_name} {self.title} {self.private}"
-    sql_insert_txt = "INSERT INTO person_ex (handle, gramps_id, gender, given_name, surname, title, change, private) values (?,?,?,?,?,?,?,?)"
+    ### sql_insert_txt = "INSERT INTO person_ex (handle, gramps_id, gender, given_name, surname, title, change, private) values (?,?,?,?,?,?,?,?)"
+    sql_insert_txt = "INSERT INTO persons_person (handle, gramps_id, gender, given_name, surname, title, change, private) values (?,?,?,?,?,?,?,?)"
     def exec_insert(self, con):
         given_name = self.given_name if self.given_name != '' else self.given_name_list
         exec_result = con.execute (self.sql_insert_txt, (self.handle, self.gramps_id, self.gender, given_name, self.surname, self.title, self.change, self.private))
@@ -37,7 +38,8 @@ def create_table(con):
 
 ### main
 con = sqlite3.connect('file:sqlite.db?mode=ro', uri=True)
-con_ex = sqlite3.connect('grampsLN.db')
+### con_ex = sqlite3.connect('grampsLN.db')
+con_ex = sqlite3.connect('C:\\Users\\larsn\\GitHub\\my-django\\my_gramps\\db.sqlite3')
 
 for row in con.execute("SELECT handle, blob_data FROM person"):
     person = person_cls(pickle.loads(row[1]))
@@ -46,7 +48,8 @@ for row in con.execute("SELECT handle, blob_data FROM person"):
     result = person.exec_insert(con_ex)
 
 con_ex.commit()
-result = con_ex.execute("SELECT * FROM person_ex")
+### result = con_ex.execute("SELECT * FROM person_ex")
+result = con_ex.execute("SELECT * FROM persons_person")
 print(result)
 con.close()
 con_ex.close()
