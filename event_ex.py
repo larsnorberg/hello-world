@@ -1,6 +1,6 @@
 # event_ex.py
 
-## todo: utöka event_ex med platsinformation
+## todo:
 
 import datetime
 import pickle
@@ -19,18 +19,20 @@ class Event: # class to handle event data and extension table
         self.date_str = tuple[3][4] if tuple[3] != None else ''
         if (len(self.date_str)==8): self.date_str = self.date_str[:4] + '-' + self.date_str[4:6] + '-' + self.date_str[6:]
         self.description = tuple[4]
+        self.event_code = tuple[2][0]
         self.event_type = event_type(tuple[2][0]) ### if len(event_types) > tuple[2][0] else str(tuple[2][0])
         self.gramps_id = tuple[1]
         self.handle = tuple[0]
-        self.place_handle = tuple[5]
+        self.place_handle = tuple[5] if tuple[5] != None else ''
         self.private = tuple[12]
     def __str__(self):
         return f"{self.event_type} {self.description} {self.date_str} {self.gramps_id} place:{self.place_handle}"
     ### sql_insert_txt = "INSERT INTO event_ex (handle, gramps_id, date, event_type, description, place_title, change, private, obj_handle, obj_class) values (?,?,?,?,?,?,?,?,?,?)"
-    sql_insert_txt = "INSERT INTO persons_event (handle, gramps_id, date, event_type, description, place_title, change, private, obj_handle, obj_class) values (?,?,?,?,?,?,?,?,?,?)"
+    sql_insert_txt = """INSERT INTO persons_event (handle, gramps_id, date, event_type
+        , description, place_title, change, private, obj_handle, obj_class, event_code) values (?,?,?,?,?,?,?,?,?,?,?)"""
     def exec_insert(self, con, place_title, obj_handle, obj_class):
         exec_result = con.execute (self.sql_insert_txt, (self.handle, self.gramps_id, self.date_str, self.event_type, self.description, \
-                                                         place_title, self.change, self.private, obj_handle, obj_class)) 
+                                                         place_title, self.change, self.private, obj_handle, obj_class, self.event_code)) 
         return exec_result
 # end Event
 
