@@ -11,6 +11,8 @@ from utility_cls import print_collection
 
 print("\nExecution of person_ex started")
 
+db_source_uri = 'file:///C:/Users/larsn/Google%20Drive/grampsdb/60671bde/sqlite.db?mode=ro' # Malmön2
+
 class person_cls:
     def __init__(self, person):
         # ColIndex 0=handle 1=identity 2= 3=Name mm(tuple) 17=change
@@ -44,11 +46,11 @@ def create_table(con):
     con.execute("CREATE TABLE person_ex (Handle VARCHAR(50) PRIMARY KEY NOT NULL, gramps_id TEXT, gender TEXT, given_name TEXT, surname TEXT, title TEXT, private INTEGER)")
 
 ### main
-con = sqlite3.connect('file:sqlite.db?mode=ro', uri=True)
+source_con = sqlite3.connect(db_source_uri, uri=True)
 ### con_ex = sqlite3.connect('grampsLN.db')
 con_ex = sqlite3.connect('C:\\Users\\larsn\\GitHub\\my-django\\my_gramps\\db.sqlite3')
 
-for row in con.execute("""SELECT handle, blob_data FROM person """):
+for row in source_con.execute("""SELECT handle, blob_data FROM person """):
     person = person_cls(pickle.loads(row[1]))
     print(person)
     print(pickle.loads(row[1]))
@@ -58,6 +60,6 @@ con_ex.commit()
 ### result = con_ex.execute("SELECT * FROM person_ex")
 result = con_ex.execute("SELECT * FROM persons_person")
 print(result)
-con.close()
+source_con.close()
 con_ex.close()
 print("Execution finished")

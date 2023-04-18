@@ -14,6 +14,8 @@ from utility_cls import gramps_dateCls
 msg = "\nExecution of family_ex started: "
 print(msg)
 
+db_source_uri = 'file:///C:/Users/larsn/Google%20Drive/grampsdb/60671bde/sqlite.db?mode=ro' # Malmön2
+
 class familyCls:
     MARRIED = 0
     UNMARRIED = 1
@@ -58,12 +60,12 @@ class child_family_cls:
         return exec_result
 
 ### main ###
-con = sqlite3.connect('file:sqlite.db?mode=ro', uri=True)
-con.row_factory = sqlite3.Row # use row_faktory
+source_con = sqlite3.connect(db_source_uri, uri=True)
+source_con.row_factory = sqlite3.Row # use row_faktory
 ### con_ex = sqlite3.connect('grampsLN.db')
 con_ex = sqlite3.connect('C:\\Users\\larsn\\GitHub\\my-django\\my_gramps\\db.sqlite3')
 
-for row in con.execute("SELECT handle, blob_data FROM family"):
+for row in source_con.execute("SELECT handle, blob_data FROM family"):
     family = familyCls(pickle.loads(row['blob_data']))
     print(family)
     print(pickle.loads(row['blob_data']))
@@ -76,5 +78,5 @@ for row in con.execute("SELECT handle, blob_data FROM family"):
 
 con_ex.commit()
 con_ex.close()
-con.close()
+source_con.close()
 print ('Execution ended\n')
