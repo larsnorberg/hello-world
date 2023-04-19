@@ -9,6 +9,7 @@ import os
 import sqlite3
 import pathlib
 from utility import * # alla namn i en fil
+import id
 
 # path
 def path_stuff():
@@ -73,6 +74,8 @@ def attach_db():
 
 ##### __main __ ####
 print ("\n\n")
+id = id.create_id()
+print(id)
 # attach_db()
 print( "age:", calculate_age(datetime.date(1950,3,20)))
 ## path_stuff()
