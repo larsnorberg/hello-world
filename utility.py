@@ -1,4 +1,4 @@
-# utility_cls.py
+# utility.py
 
 class gramps_dateCls:
     def __init__(self, date_tuple):

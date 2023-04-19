@@ -3,8 +3,8 @@
 import datetime
 import pickle
 import sqlite3
-from utility_cls import print_collection
-from utility_cls import gramps_dateCls
+from utility import print_collection
+from utility import gramps_dateCls
 # from meta_data import event_types
 
 ### To Do

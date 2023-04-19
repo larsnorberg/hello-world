@@ -8,7 +8,7 @@ import datetime
 import os
 import sqlite3
 import pathlib
-from utility_cls import * # alla namn i en fil
+from utility import * # alla namn i en fil
 
 # path
 def path_stuff():

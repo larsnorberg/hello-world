@@ -7,7 +7,7 @@
 import pickle
 import sqlite3
 import datetime
-from utility_cls import print_collection
+from utility import print_collection
 
 print("\nExecution of person_ex started")
 
