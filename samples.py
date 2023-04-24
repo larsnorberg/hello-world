@@ -4,12 +4,16 @@
 ## import from other (sub)folder
 
 # imports
+import base64
 import datetime
+import id
+import json
+import pathlib
+import pickle
 import os
 import sqlite3
-import pathlib
+import sys
 from utility import * # alla namn i en fil
-import id
 
 # path
 def path_stuff():
@@ -72,11 +76,28 @@ def attach_db():
     for person_db in cur_ex.execute("SELECT * FROM gramps.person LIMIT 10"):
         print(person_db)
 
+def read_json_file():
+    with open('place.json') as place_file:
+        parsed_json = json.load(place_file)
+        print(type(parsed_json))
+        print(parsed_json[0])
+        blob_data = base64.standard_b64decode(parsed_json[0]['blob_data'])
+        unpickeld = pickle.loads(blob_data)
+        print(unpickeld)
+        print()
+        ### print(type(file_content))
+        ###print(file_list[-1])
+
+def main() -> int:
+    print ("started\n\n")
+    read_json_file()
+    # attach_db()
+    gramps_handle = id.create_id()
+    print(gramps_handle)
+    print( "age:", calculate_age(datetime.date(1950,5,23)))
+    ## path_stuff()
+    print("finished!!")
+    return 0
+
 ##### __main __ ####
-print ("\n\n")
-id = id.create_id()
-print(id)
-# attach_db()
-print( "age:", calculate_age(datetime.date(1950,3,20)))
-## path_stuff()
-print("finished!!")
+if __name__ == '__main__': sys.exit(main())
