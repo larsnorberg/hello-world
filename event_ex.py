@@ -34,8 +34,7 @@ class Event: # class to handle event data and extension table
         self.private = tuple[12]
     def __str__(self):
         return f"{self.event_type} {self.description} {self.date_str} {self.gramps_id} place:{self.place_handle}"
-    ### sql_insert_txt = "INSERT INTO event_ex (handle, gramps_id, date, event_type, description, place_title, change, private, obj_handle, obj_class) values (?,?,?,?,?,?,?,?,?,?)"
-    sql_insert_txt = """INSERT INTO persons_event (handle, gramps_id, date, event_type
+    sql_insert_txt = """REPLACE INTO persons_event (handle, gramps_id, date, event_type
         , description, place_title, change, private, obj_handle, obj_class, event_code, source_app) values (?,?,?,?,?,?,?,?,?,?,?,?)"""
     def exec_insert(self, con, place_title, obj_handle, obj_class):
         if not place_title:
@@ -43,7 +42,17 @@ class Event: # class to handle event data and extension table
         exec_result = con.execute (self.sql_insert_txt, (self.handle, self.gramps_id, self.date_str, self.event_type, self.description, \
                                                          place_title, self.change, self.private, obj_handle, obj_class, self.event_code, source['source_app'])) 
         return exec_result
-# end Event
+# end class Event
+
+class Place:
+    def __init__(self,  place_blob) -> None:
+        if place_blob: 
+            place_tuple = pickle.loads(place_blob)
+            utility.print_collection(place_tuple) # for debug
+            self.title = place_tuple[6][0]
+        else: self.title = ''
+    def __str__(self) -> str:
+        return f"{self.title}"
 
 
 #*** start main ***
@@ -53,13 +62,14 @@ for source in meta_data.source_list:
     source_con = sqlite3.connect(source['db_source_uri'], uri=True)
     source_con.row_factory = sqlite3.Row # use row_faktory
 
-    for row in source_con.execute("""SELECT event.handle, event.blob_data, place.title, r.obj_handle, r.obj_class 
+    for row in source_con.execute("""SELECT event.handle, event.blob_data, place.title, r.obj_handle, r.obj_class, place.blob_data 
             FROM event LEFT JOIN place ON event.place = place.handle
             JOIN reference AS r ON r.ref_handle = event.handle"""):
-        utility.print_collection(pickle.loads(row[1])) # for debugging
+        ## utility.print_collection(pickle.loads(row[1])) # for debugging
         event = Event(pickle.loads(row[1]))
-        print(event)
-        result = event.exec_insert(con_ex, row[2], row[3], row[4])
+        ## print(event)
+        place = Place(row[5])
+        result = event.exec_insert(con_ex, place.title, row[3], row[4])
     con_ex.commit()
     source_con.close()
 con_ex.close() 
