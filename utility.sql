@@ -21,3 +21,22 @@ SELECT person.given_name FROM reference
 JOIN family ON reference.ref_handle = family.handle
 JOIN person on reference.obj_handle = person.handle
 WHERE family.gramps_id = 'F0001'
+
+-- Analys av reference 1
+SELECT obj_class, ref_class, COUNT() from reference
+GROUP BY obj_class, ref_class
+-- ORDER BY ref_class, obj_class
+
+-- compare relation from event to place direct or via reference table
+-- ingen skillnad upptäckt 2023-04-25
+-- dock skiljer sig place.title från det som finns i picklad place.blob_data, för vissa rader
+SELECT event.description, place.title, pp.title FROM reference AS ref
+JOIN event on ref.obj_handle = event.handle
+LEFT JOIN place ON ref.ref_handle = place.handle
+LEFT JOIN place AS pp on event.place = pp.handle
+WHERE ref.obj_class = 'Event' AND ref.ref_class = 'Place'
+
+-- Analys av reference, event som saknar object
+SELECT * from event
+LEFT JOIN reference on event.handle = reference.ref_handle
+WHERE obj_class IS NULL
