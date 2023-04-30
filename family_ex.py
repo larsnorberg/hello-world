@@ -14,7 +14,7 @@ from utility import gramps_dateCls
 msg = "\nExecution of family_ex started: "
 print(msg)
 
-db_source_uri = 'file:///C:/Users/larsn/Google%20Drive/grampsdb/60671bde/sqlite.db?mode=ro' # Malmön2
+db_source_uri = 'file:///C:/Users/larsn/Google%20Drive/grampsdb/5ed79042/sqlite.db?mode=ro' # Lars Norberg övning
 
 class familyCls:
     MARRIED = 0
@@ -35,7 +35,7 @@ class familyCls:
         self.change = tuple[12]
     def __str__(self):
         return f"{self.handle} {self.gramps_id} father:{self.father_handle} mother:{self.mother_handle} {self.family_type} private:{self.private}"
-    sql_insert_txt = "REPLACE INTO persons_family (handle, gramps_id, father_handle, mother_handle, family_type, private, change) values (?,?,?,?,?,?,?)"
+    sql_insert_txt = "REPLACE INTO base_family (handle, gramps_id, father_handle, mother_handle, family_type, private, change) values (?,?,?,?,?,?,?)"
     def exec_insert(self, cursor):
         exec_result = cursor.execute (self.sql_insert_txt, (self.handle, self.gramps_id, self.father_handle, self.mother_handle, self.family_type, self.private, self.change))
         return exec_result
@@ -52,7 +52,7 @@ class child_family_cls:
     child_parent_rel_text = ('inget','födelse','adopterad','styvbarn','fadderbarn','fosterbarn','okänd')
     def __str__(self):
         return f"{self.child_handle} fader relation:{self.father_relation_text} moder relation:{self.mother_relation_text} private:{self.private}"
-    sql_insert_txt = "REPLACE INTO persons_family_child (family_handle, child_handle, father_relation, mother_relation, change, private) values (?,?,?,?,?,?)"
+    sql_insert_txt = "REPLACE INTO base_family_child (family_handle, child_handle, father_relation, mother_relation, change, private) values (?,?,?,?,?,?)"
     def exec_insert(self, con, family_handle, change):
         exec_result = con.execute (self.sql_insert_txt, (family_handle, self.child_handle, self.father_relation_text, self.mother_relation_text, change, self.private))
         return exec_result
@@ -60,7 +60,7 @@ class child_family_cls:
 ### main ###
 source_con = sqlite3.connect(db_source_uri, uri=True)
 source_con.row_factory = sqlite3.Row # use row_faktory
-con_ex = sqlite3.connect('C:\\Users\\larsn\\GitHub\\my-django\\my_gramps\\db.sqlite3')
+con_ex = sqlite3.connect('C:\\Users\\larsn\\source\\django\\db.sqlite3')
 
 for row in source_con.execute("SELECT handle, blob_data FROM family"):
     family = familyCls(pickle.loads(row['blob_data']))

@@ -68,6 +68,6 @@ def event_type(type):
         return type
 
 source_list = [
-    {'source_app': 1, 'app_name': 'LarsNorberg Övning', 'db_source_uri': 'file:///C:/Users/larsn/Google%20Drive/grampsdb/5ed79042/sqlite.db?mode=ro'}, 
-    {'source_app': 8, 'app_name': 'Malmön2', 'db_source_uri': 'file:///C:/Users/larsn/Google%20Drive/grampsdb/60671bde/sqlite.db?mode=ro'}, 
+    {'source_app': 1, 'tree_name': 'LarsNorberg Övning', 'app_name': 'base', 'db_source_uri': 'file:///C:/Users/larsn/Google%20Drive/grampsdb/5ed79042/sqlite.db?mode=ro'}, 
+    ### {'source_app': 8, 'tree_name': 'Malmön2', 'app_name': 'malmon', 'db_source_uri': 'file:///C:/Users/larsn/Google%20Drive/grampsdb/60671bde/sqlite.db?mode=ro'}, 
 ]

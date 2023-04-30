@@ -9,7 +9,7 @@ from utility import print_collection
 
 print("\nExecution of person_ex started")
 
-db_source_uri = 'file:///C:/Users/larsn/Google%20Drive/grampsdb/60671bde/sqlite.db?mode=ro' # Malmön2
+db_source_uri = 'file:///C:/Users/larsn/Google%20Drive/grampsdb/5ed79042/sqlite.db?mode=ro' # Lars Norberg övning
 
 class person_cls:
     def __init__(self, person):
@@ -31,7 +31,7 @@ class person_cls:
         self.gender_code = person[2]
     def __str__(self):
         return f"{self.handle} {self.gramps_id} {self.surname} {self.given_name_all if self.given_name == '' else self.given_name} {self.title} {self.private}"
-    sql_insert_txt = "REPLACE INTO persons_person (handle, gramps_id, gender, given_name, surname, title, change, private, given_name_all, gender_code, nickname) values (?,?,?,?,?,?,?,?,?,?,?)"
+    sql_insert_txt = "REPLACE INTO base_person (handle, gramps_id, gender, given_name, surname, title, change, private, given_name_all, gender_code, nickname) values (?,?,?,?,?,?,?,?,?,?,?)"
     def exec_insert(self, con):
         given_name = self.given_name if self.given_name != '' else self.given_name_all
         exec_result = con.execute (self.sql_insert_txt, (self.handle, self.gramps_id, self.gender, given_name, self.surname \
@@ -44,7 +44,7 @@ def create_table(con):
 
 ### main
 source_con = sqlite3.connect(db_source_uri, uri=True)
-con_ex = sqlite3.connect('C:\\Users\\larsn\\GitHub\\my-django\\my_gramps\\db.sqlite3')
+con_ex = sqlite3.connect('C:\\Users\\larsn\\source\\django\\db.sqlite3')
 
 for row in source_con.execute("""SELECT handle, blob_data FROM person """):
     person = person_cls(pickle.loads(row[1]))
@@ -54,7 +54,7 @@ for row in source_con.execute("""SELECT handle, blob_data FROM person """):
 
 con_ex.commit()
 
-result = con_ex.execute("SELECT * FROM persons_person")
+result = con_ex.execute("SELECT * FROM base_person")
 print(result)
 source_con.close()
 con_ex.close()

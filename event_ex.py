@@ -34,7 +34,7 @@ class Event: # class to handle event data and extension table
         self.private = tuple[12]
     def __str__(self):
         return f"{self.event_type} {self.description} {self.date_str} {self.gramps_id} place:{self.place_handle}"
-    sql_insert_txt = """REPLACE INTO persons_event (handle, gramps_id, date, event_type
+    sql_insert_txt = """REPLACE INTO base_event (handle, gramps_id, date, event_type
         , description, place_title, change, private, obj_handle, obj_class, event_code, source_app) values (?,?,?,?,?,?,?,?,?,?,?,?)"""
     def exec_insert(self, con, place_title, obj_handle, obj_class):
         if not place_title:
@@ -57,7 +57,7 @@ class Place:
 
 #*** start main ***
 ### con_ex = sqlite3.connect('grampsLN.db')
-con_ex = sqlite3.connect('C:\\Users\\larsn\\GitHub\\my-django\\my_gramps\\db.sqlite3')
+con_ex = sqlite3.connect('C:\\Users\\larsn\\source\\django\\db.sqlite3')
 for source in meta_data.source_list:
     source_con = sqlite3.connect(source['db_source_uri'], uri=True)
     source_con.row_factory = sqlite3.Row # use row_faktory
