@@ -99,5 +99,19 @@ def main() -> int:
     print("finished!!")
     return 0
 
+def explore_meta():
+    db_source_uri = 'file:///C:/Users/larsn/Google%20Drive/grampsdb/5ed79042/sqlite.db?mode=ro'
+    source_con = sqlite3.connect(db_source_uri, uri=True)
+    source_con.row_factory = sqlite3.Row # use row_faktory
+    for row in source_con.execute("SELECT setting, value FROM metadata"):
+        try:
+            meta = pickle.loads(row['value'])
+        except:
+            pass
+        else:
+            print("setting:{} meta:{}".format(row['setting'], meta))
+    pass
+    return 0
+    
 ##### __main __ ####
 if __name__ == '__main__': sys.exit(main())
