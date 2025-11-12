@@ -1,5 +1,4 @@
 # GrampsMeta.py
-import datetime
 import pickle
 import sqlite3
 msg = "Execution started"
