@@ -4,17 +4,16 @@ import pickle
 import sqlite3
 msg = "Execution started"
 print(msg)
-conEx = sqlite3.connect('example.db')
-curEx = conEx.cursor()
+
+con = sqlite3.connect('sqlite52.db') 
 sql="""
-   SELECT setting,value FROM metadata WHERE setting = 'event_names'
+   SELECT setting,value FROM metadata
 """
-rows = curEx.execute(sql)
+rows = con.execute(sql)
 for Row in rows:
-    # event = pickle.loads((Row[1]))
-    event = Row[1]
-    unpackedEvent = pickle.loads(event)
-    print (type(event), event, unpackedEvent)
-    for e in event:
-        print(type(e),e)
+    try:
+        print(f"setting: {Row[0]} value:{pickle.loads(Row[1])} type:{type(pickle.loads(Row[1]))}")
+    except:
+        print(f"setting {Row[0]} can not be unpickled")
+con.close()
 print("Execution finished")
